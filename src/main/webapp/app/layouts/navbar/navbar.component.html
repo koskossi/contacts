@@ -1,9 +1,7 @@
 <nav data-cy="navbar" class="navbar navbar-dark navbar-expand-md bg-primary">
   <div class="container-fluid">
     <a class="navbar-brand logo" routerLink="/" (click)="collapseNavbar()">
-      <span class="logo-img"></span>
-      <span class="navbar-title">Givaudan-test</span>
-      <span class="navbar-version">{{ version }}</span>
+      <span class="navbar-title">Givaudan</span>
     </a>
     <a
       class="navbar-toggler d-lg-none"
@@ -22,8 +20,8 @@
         <li class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
           <a class="nav-link" routerLink="/" (click)="collapseNavbar()">
             <span>
-              <fa-icon icon="home"></fa-icon>
-              <span>Home</span>
+              <fa-icon icon="search"></fa-icon>
+              <span>Rechercher des contacts</span>
             </span>
           </a>
         </li>
