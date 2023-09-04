@@ -19,6 +19,12 @@ import { httpInterceptorProviders } from 'app/core/interceptor/index';
 import MainComponent from './layouts/main/main.component';
 import MainModule from './layouts/main/main.module';
 import { AppPageTitleStrategy } from './app-page-title-strategy';
+import {MatInputModule} from "@angular/material/input";
+import {MatButtonModule} from "@angular/material/button";
+import {MatFormField, MatFormFieldModule} from "@angular/material/form-field";
+import {MatIconModule} from "@angular/material/icon";
+import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
+import {MaterialModule} from "./shared/material/material.module";
 
 @NgModule({
   imports: [
@@ -29,6 +35,12 @@ import { AppPageTitleStrategy } from './app-page-title-strategy';
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: false }),
     HttpClientModule,
     MainModule,
+    BrowserAnimationsModule,
+  ],
+  exports: [
+    //MaterialModule,
+    MatFormFieldModule,
+
   ],
   providers: [
     Title,
