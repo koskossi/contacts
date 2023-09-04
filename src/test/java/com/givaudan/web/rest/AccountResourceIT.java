@@ -14,7 +14,6 @@ import com.givaudan.security.AuthoritiesConstants;
 import com.givaudan.service.UserService;
 import com.givaudan.service.dto.AdminUserDTO;
 import com.givaudan.service.dto.PasswordChangeDTO;
-import com.givaudan.service.dto.UserDTO;
 import com.givaudan.web.rest.vm.KeyAndPasswordVM;
 import com.givaudan.web.rest.vm.ManagedUserVM;
 import java.time.Instant;

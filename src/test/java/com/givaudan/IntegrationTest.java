@@ -1,6 +1,5 @@
 package com.givaudan;
 
-import com.givaudan.GivaudanTestApp;
 import com.givaudan.config.AsyncSyncConfiguration;
 import com.givaudan.config.EmbeddedSQL;
 import java.lang.annotation.ElementType;
