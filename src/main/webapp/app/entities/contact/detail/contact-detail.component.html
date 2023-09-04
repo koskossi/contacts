@@ -1,0 +1,48 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <div *ngIf="contact">
+      <h2 data-cy="contactDetailsHeading"><span jhiTranslate="givaudanTestApp.contact.detail.title">Contact</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span jhiTranslate="global.field.id">ID</span></dt>
+        <dd>
+          <span>{{ contact.id }}</span>
+        </dd>
+        <dt><span jhiTranslate="givaudanTestApp.contact.nom">Nom</span></dt>
+        <dd>
+          <span>{{ contact.nom }}</span>
+        </dd>
+        <dt><span jhiTranslate="givaudanTestApp.contact.prenom">Prenom</span></dt>
+        <dd>
+          <span>{{ contact.prenom }}</span>
+        </dd>
+        <dt><span jhiTranslate="givaudanTestApp.contact.age">Age</span></dt>
+        <dd>
+          <span>{{ contact.age }}</span>
+        </dd>
+        <dt><span jhiTranslate="givaudanTestApp.contact.address">Address</span></dt>
+        <dd>
+          <span>{{ contact.address }}</span>
+        </dd>
+        <dt><span jhiTranslate="givaudanTestApp.contact.codepostal">Codepostal</span></dt>
+        <dd>
+          <span>{{ contact.codepostal }}</span>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/contact', contact.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

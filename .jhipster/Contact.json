@@ -1,5 +1,7 @@
 {
+  "changelogDate": "20230904203538",
   "dto": "mapstruct",
+  "entityTableName": "contact",
   "fields": [
     {
       "fieldName": "nom",
@@ -26,8 +28,10 @@
     }
   ],
   "jpaMetamodelFiltering": true,
+  "name": "Contact",
   "pagination": "pagination",
   "readOnly": false,
   "relationships": [],
+  "searchEngine": "no",
   "service": "serviceClass"
 }
