@@ -13,7 +13,7 @@ import {ITEMS_PER_PAGE, PAGE_HEADER, TOTAL_COUNT_RESPONSE_HEADER} from "../confi
 import {ContactService, EntityArrayResponseType} from "../entities/contact/service/contact.service";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {ContactDeleteDialogComponent} from "../entities/contact/delete/contact-delete-dialog.component";
-import {ASC, DEFAULT_SORT_DATA, DESC, ITEM_DELETED_EVENT, SORT} from "../config/navigation.constants";
+import {ASC, DEFAULT_SORT_DATA, DESC, ITEM_DELETED_EVENT} from "../config/navigation.constants";
 import {HttpHeaders} from "@angular/common/http";
 import {MatTableDataSource} from "@angular/material/table";
 import {MatPaginator, MatPaginatorIntl} from "@angular/material/paginator";
@@ -107,7 +107,12 @@ export default class HomeComponent implements OnInit, OnDestroy {
   }
 
   rechercher(event: Event) {
-
+    const target = event.target as HTMLButtonElement;
+    this.dataSource.filter = target.value.trim().toLowerCase();
+    console.log(this.dataSource.filter);
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }
   }
 
 
@@ -224,15 +229,6 @@ export default class HomeComponent implements OnInit, OnDestroy {
       return [];
     } else {
       return [predicate + ',' + ascendingQueryParam];
-    }
-  }
-
-
-  applyFilter(filterValue: string) {
-    this.dataSource.filter = filterValue.trim().toLowerCase();
-    console.log(this.dataSource.filter);
-    if (this.dataSource.paginator) {
-      this.dataSource.paginator.firstPage();
     }
   }
 
