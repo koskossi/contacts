@@ -1,4 +1,4 @@
-import {Component, OnInit, OnDestroy, ViewChild, ChangeDetectorRef, OnChanges} from '@angular/core';
+import {Component, OnInit, OnDestroy, ViewChild, ChangeDetectorRef, OnChanges, DoCheck} from '@angular/core';
 import {ActivatedRoute, Data, ParamMap, Router, RouterModule} from '@angular/router';
 import {combineLatest, filter, Observable, Subject, switchMap, tap} from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -7,7 +7,7 @@ import SharedModule from 'app/shared/shared.module';
 import { AccountService } from 'app/core/auth/account.service';
 import { Account } from 'app/core/auth/account.model';
 import {MatButtonModule} from "@angular/material/button";
-import {IContact} from "../entities/contact/contact.model";
+import {IContact, UserContact} from "../entities/contact/contact.model";
 import {FilterOptions, IFilterOption, IFilterOptions} from "../shared/filter";
 import {ITEMS_PER_PAGE, PAGE_HEADER, TOTAL_COUNT_RESPONSE_HEADER} from "../config/pagination.constants";
 import {ContactService, EntityArrayResponseType} from "../entities/contact/service/contact.service";
@@ -20,22 +20,6 @@ import {MatPaginator, MatPaginatorIntl} from "@angular/material/paginator";
 import {MatSort} from "@angular/material/sort";
 
 
-export class UserContact {
-  id: number;
-  nom: string;
-  prenom: string;
-  age: any;
-  address: string;
-  action: any;
-  constructor(id: number,nom: string,prenom: string, age: any,address: string,action: any) {
-    this.id = id;
-    this.nom=  nom;
-    this.prenom= prenom;
-    this.age= age;
-    this.address = address;
-    this.action = action;
-  }
-}
 
 @Component({
   standalone: true,
@@ -46,13 +30,10 @@ export class UserContact {
 })
 export default class HomeComponent implements OnInit, OnDestroy {
   account: Account | null = null;
-  public contact: string;
   private readonly destroy$ = new Subject<void>();
-
 
   contacts?: IContact[];
   isLoading = false;
-
   predicate = 'id';
   ascending = true;
   filters: IFilterOptions = new FilterOptions();
@@ -63,11 +44,11 @@ export default class HomeComponent implements OnInit, OnDestroy {
 
 
   /// Table material
-  columnsToDisplay: string[] = ['nom','prenom', 'age','address','action']; //TODO make this dynamic somehow //private
-  dataSource: MatTableDataSource<any>;
+  columnsToDisplay: string[] =[];
+  dataSource: MatTableDataSource<UserContact>;
   @ViewChild(MatSort) sort: MatSort = new MatSort();
   @ViewChild(MatPaginator) paginator: MatPaginator = new MatPaginator(new MatPaginatorIntl(), ChangeDetectorRef.prototype);
-  exportList: any[] =[];
+  exportList: UserContact[] =[];
 
 
   constructor(private accountService: AccountService, private router: Router,
@@ -75,26 +56,25 @@ export default class HomeComponent implements OnInit, OnDestroy {
               protected activatedRoute: ActivatedRoute,
               protected modalService: NgbModal
               ) {
-   this.contact ='';
+    this.columnsToDisplay =  ['nom','prenom', 'age','address','action']
     let listeContact: Array<UserContact> = new Array<UserContact>();
     this.dataSource = new MatTableDataSource(listeContact);
   }
 
 
-  trackId = (_index: number, item: IContact): number => this.contactService.getContactIdentifier(item);
 
 
   ngOnInit(): void {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
+    // Tester si on est authentifier
     this.accountService
       .getAuthenticationState()
       .pipe(takeUntil(this.destroy$))
       .subscribe(account => (this.account = account));
-
-      this.recupererContacts();
-      this.filters.filterChanges.subscribe(filterOptions => this.handleNavigation(1, this.predicate, this.ascending, filterOptions));
-
+    // récpérer la liste des contacts
+    this.recupererContacts();
+    this.filters.filterChanges.subscribe(filterOptions => this.handleNavigation(1, this.predicate, this.ascending, filterOptions));
   }
 
 
@@ -174,7 +154,6 @@ export default class HomeComponent implements OnInit, OnDestroy {
       }
     })
     this.exportList = listeContact;
-    // this.pageSize = 5;
     this.dataSource = new MatTableDataSource(listeContact);
   }
 
@@ -235,11 +214,11 @@ export default class HomeComponent implements OnInit, OnDestroy {
     const csvData = this.convertToCSV(this.exportList);
     const blob = new Blob([csvData], { type: 'text/csv' });
     const url = window.URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'exported-data.csv';
-    document.body.appendChild(a);
-    a.click();
+    const button = document.createElement('a');
+    button.href = url;
+    button.download = 'exported-data.csv';
+    document.body.appendChild(button);
+    button.click();
     window.URL.revokeObjectURL(url);
   }
   private convertToCSV(data: any[]): string {
@@ -247,5 +226,8 @@ export default class HomeComponent implements OnInit, OnDestroy {
     const rows = data.map(item => Object.values(item).join(','));
     return `${header}\n${rows.join('\n')}`;
   }
+
+  // trackId = (_index: number, item: IContact): number => this.contactService.getContactIdentifier(item);
+
 
 }

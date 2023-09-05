@@ -1,10 +1,10 @@
-<div class="container">
+<div class="container" *ngIf="account!=null ; else noConnectedTemplate">
   <div class="row">
     <div class="col-md-8 offset-md-2">
       <form >
         <div class="input-group col-md-10" >
           <mat-form-field class="example-full-width">
-            <mat-label>Rechercher par Nom ou Prénom </mat-label>
+            <mat-label>Rechercher par Nom, Prénom, Age... </mat-label>
             <input matInput #message maxlength="256" placeholder="Ex. Alexandre , Louis..." (keyup)="rechercher($event)">
           </mat-form-field>
         </div>
@@ -35,12 +35,12 @@
           <td mat-cell *matCellDef="let entry"> {{entry.age}} </td>
         </ng-container>
         <ng-container matColumnDef="address">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header> Address </th>
+          <th mat-header-cell class="text"  *matHeaderCellDef mat-sort-header> Adresse </th>
           <td mat-cell *matCellDef="let entry"> {{entry.address}} </td>
         </ng-container>
 
         <ng-container matColumnDef="action">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header> Action </th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header > Action </th>
           <td mat-cell *matCellDef="let entry">
 
             <div class="btn-group">
@@ -80,4 +80,10 @@
 </div>
 
 
+
+<ng-template #noConnectedTemplate>
+<p class="text-danger">Vous n'étes pas connecté !</p>
+  <div class="alert alert-secondary" role="alert">
+    Authentification requise veuillez vous connecter à votre compte valide </div>
+</ng-template>
 
