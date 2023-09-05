@@ -21,12 +21,14 @@ import {MatSort} from "@angular/material/sort";
 
 
 export class UserContact {
+  id: number;
   nom: string;
   prenom: string;
   age: any;
   address: string;
   action: any;
-  constructor(nom: string,prenom: string, age: any,address: string,action: any) {
+  constructor(id: number,nom: string,prenom: string, age: any,address: string,action: any) {
+    this.id = id;
     this.nom=  nom;
     this.prenom= prenom;
     this.age= age;
@@ -34,16 +36,6 @@ export class UserContact {
     this.action = action;
   }
 }
-
-
-export interface PeriodicElement {
-  name: string;
-  position: number;
-  weight: number;
-  symbol: string;
-}
-let ELEMENT_DATA: PeriodicElement[] ;
-
 
 @Component({
   standalone: true,
@@ -175,7 +167,7 @@ export default class HomeComponent implements OnInit, OnDestroy {
 
     this.contacts.forEach((contact: any)=> {
       if(contact) {
-        listeContact.push(new UserContact(contact.nom,contact.prenom, contact.age, contact.address, ""));
+        listeContact.push(new UserContact(contact.id,contact.nom,contact.prenom, contact.age, contact.address, ""));
       }
     })
     // this.pageSize = 5;
