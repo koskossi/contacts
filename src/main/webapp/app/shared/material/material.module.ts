@@ -22,6 +22,7 @@ import {MatListModule} from "@angular/material/list";
 import {MatRadioModule} from "@angular/material/radio";
 import {MatMenuModule} from "@angular/material/menu";
 import {NgModule} from "@angular/core";
+import {MatTableModule} from "@angular/material/table";
 
 
 @NgModule({
@@ -47,7 +48,9 @@ import {NgModule} from "@angular/core";
     MatAutocompleteModule,
     MatRadioModule,
     MatListModule,
-    MatIconModule],
+    MatIconModule,
+    MatTableModule
+  ],
   exports: [MatButtonModule,
     MatCheckboxModule,
     MatFormFieldModule,
@@ -70,6 +73,9 @@ import {NgModule} from "@angular/core";
     MatAutocompleteModule,
     MatRadioModule,
     MatListModule,
-    MatIconModule],
+    MatIconModule,
+    MatTableModule
+  ],
+
 })
 export class MaterialModule {}
