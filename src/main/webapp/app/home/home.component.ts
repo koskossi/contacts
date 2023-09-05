@@ -67,7 +67,7 @@ export default class HomeComponent implements OnInit, OnDestroy {
   dataSource: MatTableDataSource<any>;
   @ViewChild(MatSort) sort: MatSort = new MatSort();
   @ViewChild(MatPaginator) paginator: MatPaginator = new MatPaginator(new MatPaginatorIntl(), ChangeDetectorRef.prototype);
-
+  exportList: any[] =[];
 
 
   constructor(private accountService: AccountService, private router: Router,
@@ -92,10 +92,8 @@ export default class HomeComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe(account => (this.account = account));
 
-      if (this.account) {
-        this.recupererContacts();
-      }
-    this.filters.filterChanges.subscribe(filterOptions => this.handleNavigation(1, this.predicate, this.ascending, filterOptions));
+      this.recupererContacts();
+      this.filters.filterChanges.subscribe(filterOptions => this.handleNavigation(1, this.predicate, this.ascending, filterOptions));
 
   }
 
@@ -175,6 +173,7 @@ export default class HomeComponent implements OnInit, OnDestroy {
         listeContact.push(new UserContact(contact.id,contact.nom,contact.prenom, contact.age, contact.address, ""));
       }
     })
+    this.exportList = listeContact;
     // this.pageSize = 5;
     this.dataSource = new MatTableDataSource(listeContact);
   }
@@ -230,6 +229,23 @@ export default class HomeComponent implements OnInit, OnDestroy {
     } else {
       return [predicate + ',' + ascendingQueryParam];
     }
+  }
+
+  exportCsv() {
+    const csvData = this.convertToCSV(this.exportList);
+    const blob = new Blob([csvData], { type: 'text/csv' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'exported-data.csv';
+    document.body.appendChild(a);
+    a.click();
+    window.URL.revokeObjectURL(url);
+  }
+  private convertToCSV(data: any[]): string {
+    const header = Object.keys(data[0]).join(',');
+    const rows = data.map(item => Object.values(item).join(','));
+    return `${header}\n${rows.join('\n')}`;
   }
 
 }

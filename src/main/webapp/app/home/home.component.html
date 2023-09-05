@@ -12,7 +12,12 @@
     </div>
   </div>
 
-<button (click)="recupererContacts()"> Recupérer la liste des contacts</button>
+
+  <div class="row mb-2">
+    <div class="col-md-3 offset-md-10">
+      <button mat-button color="btn-style" (click)="exportCsv()">Export CSV</button>
+    </div>
+  </div>
 
   <div class="mb-2">
     <div class="mat-elevation-z8" >
