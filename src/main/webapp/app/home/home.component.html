@@ -3,7 +3,7 @@
     <div class="col-md-8 offset-md-2">
       <form >
         <div class="input-group col-md-10" >
-          <mat-form-field class="example-full-width">
+          <mat-form-field class="input-full-width">
             <mat-label>Rechercher par Nom, Prénom, Age... </mat-label>
             <input matInput #message maxlength="256" placeholder="Ex. Alexandre , Louis..." (keyup)="rechercher($event)">
           </mat-form-field>
@@ -11,14 +11,11 @@
       </form>
     </div>
   </div>
-
-
   <div class="row mb-2">
     <div class="col-md-3 offset-md-10">
       <button mat-button color="btn-style" (click)="exportCsv()">Export CSV</button>
     </div>
   </div>
-
   <div class="mb-2">
     <div class="mat-elevation-z8" >
       <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort>
