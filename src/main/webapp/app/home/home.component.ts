@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import {Component, OnInit, OnDestroy, ViewChild, ChangeDetectorRef, OnChanges} from '@angular/core';
 import {ActivatedRoute, Data, ParamMap, Router, RouterModule} from '@angular/router';
 import {combineLatest, filter, Observable, Subject, switchMap, tap} from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -15,6 +15,26 @@ import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {ContactDeleteDialogComponent} from "../entities/contact/delete/contact-delete-dialog.component";
 import {ASC, DEFAULT_SORT_DATA, DESC, ITEM_DELETED_EVENT, SORT} from "../config/navigation.constants";
 import {HttpHeaders} from "@angular/common/http";
+import {MatTableDataSource} from "@angular/material/table";
+import {MatPaginator, MatPaginatorIntl} from "@angular/material/paginator";
+import {MatSort} from "@angular/material/sort";
+
+
+export class UserContact {
+  nom: string;
+  prenom: string;
+  age: any;
+  address: string;
+  action: any;
+  constructor(nom: string,prenom: string, age: any,address: string,action: any) {
+    this.nom=  nom;
+    this.prenom= prenom;
+    this.age= age;
+    this.address = address;
+    this.action = action;
+  }
+}
+
 
 export interface PeriodicElement {
   name: string;
@@ -22,18 +42,8 @@ export interface PeriodicElement {
   weight: number;
   symbol: string;
 }
-const ELEMENT_DATA: PeriodicElement[] = [
-  {position: 1, name: 'Hydrogen', weight: 1.0079, symbol: 'H'},
-  {position: 2, name: 'Helium', weight: 4.0026, symbol: 'He'},
-  {position: 3, name: 'Lithium', weight: 6.941, symbol: 'Li'},
-  {position: 4, name: 'Beryllium', weight: 9.0122, symbol: 'Be'},
-  {position: 5, name: 'Boron', weight: 10.811, symbol: 'B'},
-  {position: 6, name: 'Carbon', weight: 12.0107, symbol: 'C'},
-  {position: 7, name: 'Nitrogen', weight: 14.0067, symbol: 'N'},
-  {position: 8, name: 'Oxygen', weight: 15.9994, symbol: 'O'},
-  {position: 9, name: 'Fluorine', weight: 18.9984, symbol: 'F'},
-  {position: 10, name: 'Neon', weight: 20.1797, symbol: 'Ne'},
-];
+let ELEMENT_DATA: PeriodicElement[] ;
+
 
 @Component({
   standalone: true,
@@ -47,9 +57,6 @@ export default class HomeComponent implements OnInit, OnDestroy {
   public contact: string;
   private readonly destroy$ = new Subject<void>();
 
-  displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
-  dataSource = ELEMENT_DATA;
-
 
   contacts?: IContact[];
   isLoading = false;
@@ -62,13 +69,23 @@ export default class HomeComponent implements OnInit, OnDestroy {
   totalItems = 0;
   page = 1;
 
+
+  /// Table material
+  columnsToDisplay: string[] = ['nom','prenom', 'age','address','action']; //TODO make this dynamic somehow //private
+  dataSource: MatTableDataSource<any>;
+  @ViewChild(MatSort) sort: MatSort = new MatSort();
+  @ViewChild(MatPaginator) paginator: MatPaginator = new MatPaginator(new MatPaginatorIntl(), ChangeDetectorRef.prototype);
+
+
+
   constructor(private accountService: AccountService, private router: Router,
               protected contactService: ContactService,
               protected activatedRoute: ActivatedRoute,
               protected modalService: NgbModal
               ) {
    this.contact ='';
-    //this.contacts= []
+    let listeContact: Array<UserContact> = new Array<UserContact>();
+    this.dataSource = new MatTableDataSource(listeContact);
   }
 
 
@@ -76,6 +93,8 @@ export default class HomeComponent implements OnInit, OnDestroy {
 
 
   ngOnInit(): void {
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
     this.accountService
       .getAuthenticationState()
       .pipe(takeUntil(this.destroy$))
@@ -152,6 +171,15 @@ export default class HomeComponent implements OnInit, OnDestroy {
     this.fillComponentAttributesFromResponseHeader(response.headers);
     const dataFromBody = this.fillComponentAttributesFromResponseBody(response.body);
     this.contacts = dataFromBody;
+    let listeContact: Array<UserContact> = new Array<UserContact>();
+
+    this.contacts.forEach((contact: any)=> {
+      if(contact) {
+        listeContact.push(new UserContact(contact.nom,contact.prenom, contact.age, contact.address, ""));
+      }
+    })
+    // this.pageSize = 5;
+    this.dataSource = new MatTableDataSource(listeContact);
   }
 
   protected fillComponentAttributesFromResponseBody(data: IContact[] | null): IContact[] {
@@ -204,6 +232,15 @@ export default class HomeComponent implements OnInit, OnDestroy {
       return [];
     } else {
       return [predicate + ',' + ascendingQueryParam];
+    }
+  }
+
+
+  applyFilter(filterValue: string) {
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+    console.log(this.dataSource.filter);
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
     }
   }
 

@@ -23,6 +23,8 @@ import {MatRadioModule} from "@angular/material/radio";
 import {MatMenuModule} from "@angular/material/menu";
 import {NgModule} from "@angular/core";
 import {MatTableModule} from "@angular/material/table";
+import {MatPaginatorModule} from "@angular/material/paginator";
+import {MatSortModule} from "@angular/material/sort";
 
 
 @NgModule({
@@ -49,7 +51,9 @@ import {MatTableModule} from "@angular/material/table";
     MatRadioModule,
     MatListModule,
     MatIconModule,
-    MatTableModule
+    MatTableModule,
+    MatPaginatorModule,
+    MatSortModule
   ],
   exports: [MatButtonModule,
     MatCheckboxModule,
@@ -74,7 +78,9 @@ import {MatTableModule} from "@angular/material/table";
     MatRadioModule,
     MatListModule,
     MatIconModule,
-    MatTableModule
+    MatTableModule,
+    MatPaginatorModule,
+    MatSortModule,
   ],
 
 })
