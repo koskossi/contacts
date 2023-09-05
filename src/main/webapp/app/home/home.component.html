@@ -1,27 +1,17 @@
-<div class="row">
-
-
-  <div class="col-md-9 ">
-
-  <div class="alert alert-info">
-
-
-  <form class="example-form">
-    <mat-form-field class="example-full-width">
-      <mat-label>Message</mat-label>
-      <input matInput #message maxlength="256" placeholder="Ex. I need help with...">
-      <mat-hint align="start"><strong>Don't disclose personal info</strong> </mat-hint>
-      <mat-hint align="end">{{message.value.length}} / 256</mat-hint>
-    </mat-form-field>
-  </form>
-
-
-
-</div>
+<div class="container">
+  <div class="row">
+    <div class="col-md-8 offset-md-2">
+      <form >
+        <div class="input-group col-md-10" >
+          <mat-form-field class="example-full-width">
+            <mat-label>Rechercher par Nom ou Prénom </mat-label>
+            <input matInput #message maxlength="256" placeholder="Ex. Alexandre , Louis..." (keyup)="rechercher($event)">
+          </mat-form-field>
+        </div>
+      </form>
+    </div>
   </div>
-
-
-
-
-
 </div>
+
+
+
